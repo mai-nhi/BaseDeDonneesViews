@@ -198,31 +198,24 @@ fieldsBim = {
         },
         "tabs":[{
             "id":"hdwork",
-            "title":"BIM",
-            "panels":[
-            {
-                "id":"hdworkP",
-                "title":"",
-                "hide":True,
-                "tabId":"hdwork",
-                "blocks":[
-                {
-                    "id":"hdworkPB",
-                    "title":"",
-                    "type":"standard",
-                    "tabId":"hdwork",
-                    "panelId":"hdworkP",
-                    "fields":[]
-                }
-                ]
-            }
-            ]
-            }]
+            "title":"BIM"}],
+        "panels":[{
+            "id":"hdworkP",
+            "title":"",
+            "hide":True,
+            "tabId":"hdwork"}],
+        "blocks":[{
+            "id":"hdworkPB",
+            "title":"",
+            "type":"standard",
+            "tabId":"hdwork",
+            "panelId":"hdworkP"}],
+        "fields":[]
         }}
 
 
 for field in lstBim[""]:
-    fieldsBim["form"]["tabs"][0]["panels"][0]["blocks"][0]["fields"] += [{
+    fieldsBim["form"]["fields"] += [{
         "dbField":"description",
         "label":field,
         "type":"textarea",
