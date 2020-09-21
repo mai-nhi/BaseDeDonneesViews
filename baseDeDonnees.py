@@ -1,6 +1,10 @@
 import mariadb
 import json
 import re
+import pandas as pd
+
+fileTab = pd.read_excel("./tabPanelBlock.xlsx")
+
 
 connection=mariadb.connect(
         user="catherine",
@@ -136,9 +140,9 @@ def addCellFieldsJson(dictionary : dict):
                 "dbField":"description",
                 "label":field,
                 "type":"textarea",
-                "tabId":"hdwork",
-                "panelId":"hdworkP",
-                "blockId":"hdworkPB"
+                "tabId":fileTab.loc[1, field],
+                "panelId":defPanelId[2,field],
+                "blockId":defBlockId[3,field]
             }]
         if len(newCell["fields"]) > 0:
             jsonUnder = json.dumps(newCell)
@@ -195,23 +199,31 @@ fieldsBim = {
                 "type":"enum"
             }
           ]
-        },
-        "tabs":[{
-            "id":"hdwork",
-            "title":"BIM"}],
-        "panels":[{
-            "id":"hdworkP",
-            "title":"",
-            "hide":True,
-            "tabId":"hdwork"}],
-        "blocks":[{
-            "id":"hdworkPB",
-            "title":"",
-            "type":"standard",
-            "tabId":"hdwork",
-            "panelId":"hdworkP"}],
-        "fields":[]
-        }}
+        }},
+    "tabs":[{
+        "id":"D.1",
+        "title":"Description"},
+        {"id":"F.1",
+        "title":"Fournitures"},
+        {"id":"M.1",
+        "title":"Main d'oeuvre"},
+        {"id":"P.1",
+        "title":"Prix de vente"},
+        {"id":"B.1",
+        "title":"BIM"}],
+    "panels":[{
+        "id":"hdworkP",
+        "title":"",
+        "hide":True,
+        "tabId":"hdwork"}],
+    "blocks":[{
+        "id":"hdworkPB",
+        "title":"",
+        "type":"standard",
+        "tabId":"hdwork",
+        "panelId":"hdworkP"}],
+    "fields":[]
+    }
 
 
 for field in lstBim[""]:
@@ -219,9 +231,9 @@ for field in lstBim[""]:
         "dbField":"description",
         "label":field,
         "type":"textarea",
-        "tabId":"hdwork",
-        "panelId":"hdworkP",
-        "blockId":"hdworkPB"
+        "tabId":fileTab.loc[1, field],
+        "panelId":defPanelId[2,field],
+        "blockId":defBlockId[3,field]
         }]
 jsonBim = json.dumps(fieldsBim)    
 cursor.execute("UPDATE hdwork_category SET views = ? WHERE BIMid = ?;",(jsonBim, "BIM"))
