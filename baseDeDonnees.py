@@ -157,7 +157,7 @@ def addCellFieldsJson(dictionary : dict):
                 "panelId":str(panelId),
                 "blockId":str(blockId)
             }]
-        print(type(newCell))
+        #print(type(newCell))
         if len(newCell["fields"]) > 0:
             jsonUnder = json.dumps(newCell)
             if type(familly) == tuple:
@@ -234,7 +234,7 @@ fieldsBim = {"bim":{
     "panels":[{
         "id":"7",
         "parentPath":["1", "7"],
-        "title":"Vide1",
+        "title":"",
         "hide":True,},
         {"id":"8",
         "parentPath":["2", "8"],
@@ -254,15 +254,15 @@ fieldsBim = {"bim":{
         "hide":True,},
         {"id":"12",
         "parentPath":["4", "12"],
-        "title":"Vide2",
+        "title":"",
         "hide":True,},
         {"id":"13",
         "parentPath":["5", "13"],
-        "title":"Vide3",
+        "title":"",
         "hide":True,},
         {"id":"14",
         "parentPath":["6", "14"],
-        "title":"Vide4",
+        "title":"",
         "hide":True,},
         {"id":"hdworkP",
         "parentPath":None,
@@ -271,7 +271,7 @@ fieldsBim = {"bim":{
     
     "blocks":[{"id": "15",
         "parentPath": ["1","7","15"],
-        "title":"Vide5",
+        "title":"",
         "type":"standard"},
         {"id": "16",
         "parentPath": ["2","8","16"],
@@ -283,7 +283,7 @@ fieldsBim = {"bim":{
         "type":"standard"},
         {"id": "18",
         "parentPath": ["3","9","18"],
-        "title":"Vide6",
+        "title":"",
         "type":"standard"},
         {"id": "19",
         "parentPath": ["3","10","19"],
@@ -307,15 +307,15 @@ fieldsBim = {"bim":{
         "type":"standard"},
         {"id": "24",
         "parentPath": ["4","12","24"],
-        "title":"Vide7",
+        "title":"",
         "type":"standard"},
         {"id": "25",
         "parentPath": ["5","13","25"],
-        "title":"Vide8",
+        "title":"",
         "type":"standard"},
         {"id": "26",
         "parentPath": ["6","14","26"],
-        "title":"Vide9",
+        "title":"",
         "type":"standard"},
         {"id": "hdworkPB",
         "parentPath": None,
