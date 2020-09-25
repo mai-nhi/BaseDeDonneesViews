@@ -8,7 +8,7 @@ fileTab = pd.read_excel("./tabPanelBlock.xlsx")
 
 
 connection=mariadb.connect(
-        user="catherine",
+        user="mainhi",
         password="1234",
         host="localhost",
         database="testOuvrage",
@@ -149,12 +149,25 @@ def addCellFieldsJson(dictionary : dict, idFields : int):
                 blockId = fileTab.loc[2, field.strip()]
             else :
                 blockId = "28"
+            if type(fileTab.loc[3, field.strip()]) != numpy.float64:
+                width = fileTab.loc[3, field.strip()]
+            else :
+                width = "1"
+            if type(fileTab.loc[4, field.strip()]) != numpy.float64 :
+                dbField = fileTab.loc[4, field.strip()]
+            else :
+                dbField = field
+            if type(fileTab.loc[5, field.strip()]) != numpy.float64 :
+                label = fileTab.loc[5, field.strip()]
+            else:
+                label = field
             newCell["fields"] += [{
                 "id":str(idFields),
-                "dbField":field,
-                "label":field,
+                "dbField":dbField,
+                "label":label,
                 "type":"textarea",
-                "parentPath":[str(tabId),str(panelId),str(blockId),str(idFields)]
+                "parentPath":[str(tabId),str(panelId),str(blockId),str(idFields)],
+                "width":str(width)
             }]
             idFields += 1
         #print(type(newCell))
@@ -178,6 +191,7 @@ idFields = addCellFieldsJson(lstCategoryGroup, idFields)
 
 fieldsBim = {"bim":{
     "title":"Ouvrages",
+    "belongsTo":"biblio",
     "layout":{
         "showConfiguratorPanel":True,
         "showCategoryPanel":True,
@@ -188,37 +202,24 @@ fieldsBim = {"bim":{
         "basicInfo":{
             "title":"",
             "type":"standard",
-            "fields":[
-            {
-                "dbField":"id",
+            "fields":[{
+                "dbField":"BIMid",
                 "label":"Réf. Ouvrage",
-                "type":"string"
-            },
-            {
+                "type":"string",
+                "width" : "1"},
+                {
                 "dbField":"name",
                 "label":"Libellé",
-                "type":"string"
-            },
-            {
-                "dbField":"group",
-                "label":"Groupe",
-                "type":"enum"
-            },
-            {
-                "dbField":"category",
-                "label":"Famille",
-                "type":"enum"
-            },
-            {
-                "dbField":"subcategory",
-                "label":"Sous-famille",
-                "type":"enum"
-            }
-          ]
+                "type":"string",
+                "width" : "1"}
+                
+                ]
         }}},
 
     "tabs":[{
-        "id":"1",
+        "id":"0",
+        "title":"hdwork"},
+        {"id":"1",
         "title":"Déboursé"},
         {"id":"2",
         "title":"Fournitures"},
@@ -229,9 +230,7 @@ fieldsBim = {"bim":{
         {"id":"5",
         "title":"Description"},
         {"id":"6",
-        "title":"BIM"},
-        {"id":"0",
-        "title":"hdwork"}],
+        "title":"BIM"}],
 
     "panels":[{
         "id":"7",
@@ -340,12 +339,33 @@ for field in lstBim[""]:
         blockId = fileTab.loc[2, field.strip()]
     else :
         blockId = "28"
-    fieldsBim["fields"] += [{
-        "id":str(idFields),
-        "dbField":field,
-        "label":field,
-        "type":"textarea",
-        "parentPath":[str(tabId),str(panelId),str(blockId),str(idFields)]
+    if type(fileTab.loc[3, field.strip()]) != numpy.float64:
+        width = fileTab.loc[3, field.strip()]
+    else :
+        width = "1"
+    if type(fileTab.loc[4, field.strip()]) != numpy.float64 :
+        dbField = fileTab.loc[4, field.strip()]
+    else :
+        dbField = field
+    if type(fileTab.loc[5, field.strip()]) != numpy.float64 :
+        label = fileTab.loc[5, field.strip()]
+    else:
+        label = field
+    if fileTab.loc[0, field.strip()] == "Basic":
+        fieldsBim["bim"]["form"]["basicInfo"]["fields"] += [{
+                "dbField": dbField,
+                "label": label,
+                "type":"string",
+                "width" : str(width)
+        }]
+    else:
+        fieldsBim["fields"] += [{
+            "id":str(idFields),
+            "dbField":dbField,
+            "label":label,
+            "type":"textarea",
+            "parentPath":[str(tabId),str(panelId),str(blockId),str(idFields)],
+            "width" : str(width)
         }]
     idFields += 1
 jsonBim = json.dumps(fieldsBim)    
