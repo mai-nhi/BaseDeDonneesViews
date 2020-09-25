@@ -128,7 +128,7 @@ fileLstNoneUnder = open("lstNoneUnder", "w")
 fileLstNoneUnder.write(str(lstFalse))
 fileLstNoneUnder.close()
 
-def addCellFieldsJson(dictionary : dict):
+def addCellFieldsJson(dictionary : dict, idFields : int):
     for familly, lstFields in dictionary.items():
         newCell = {
             "tabs":None,
@@ -140,23 +140,23 @@ def addCellFieldsJson(dictionary : dict):
             if type(fileTab.loc[0, field.strip()]) != numpy.float64 :
                 tabId = fileTab.loc[0, field.strip()]
             else :
-                tabId = "hdwork"
+                tabId = "0"
             if type(fileTab.loc[1, field.strip()]) != numpy.float64:
                 panelId = fileTab.loc[1, field.strip()]
             else :
-                panelId = "hdworkP"
+                panelId = "15"
             if type(fileTab.loc[2, field.strip()]) != numpy.float64 :
                 blockId = fileTab.loc[2, field.strip()]
             else :
-                blockId = "hdworkPB"
+                blockId = "28"
             newCell["fields"] += [{
-                "dbField":"description",
+                "id":str(idFields),
+                "dbField":field,
                 "label":field,
                 "type":"textarea",
-                "tabId":str(tabId),
-                "panelId":str(panelId),
-                "blockId":str(blockId)
+                "parentPath":[str(tabId),str(panelId),str(blockId),str(idFields)]
             }]
+            idFields += 1
         #print(type(newCell))
         if len(newCell["fields"]) > 0:
             jsonUnder = json.dumps(newCell)
@@ -164,15 +164,17 @@ def addCellFieldsJson(dictionary : dict):
                 cursor.execute("UPDATE hdwork_category SET views = ? WHERE BIMid = ?;",(jsonUnder, familly[0],))
             else:
                 cursor.execute("UPDATE hdwork_category SET views = ? WHERE BIMid = ?;",(jsonUnder,familly,))
+        return idFields
         #else:
         #    if type(familly) == tuple:
         #        cursor.execute("UPDATE hdwork_category SET views = null WHERE BIMid = ?;",(familly[0],))
         #    else:
         #        cursor.execute("UPDATE hdwork_category SET views = null WHERE BIMid = ?;",(familly,))
 
-addCellFieldsJson(lstCategoryUnder)
-addCellFieldsJson(lstCategoryFamilly)
-addCellFieldsJson(lstCategoryGroup)
+idFields = 0
+idFields = addCellFieldsJson(lstCategoryUnder, idFields)
+idFields = addCellFieldsJson(lstCategoryFamilly, idFields)
+idFields = addCellFieldsJson(lstCategoryGroup, idFields)
 
 fieldsBim = {"bim":{
     "title":"Ouvrages",
@@ -228,7 +230,7 @@ fieldsBim = {"bim":{
         "title":"Description"},
         {"id":"6",
         "title":"BIM"},
-        {"id":"hdwork",
+        {"id":"0",
         "title":"hdwork"}],
 
     "panels":[{
@@ -264,62 +266,62 @@ fieldsBim = {"bim":{
         "parentPath":["6", "14"],
         "title":"",
         "hide":True,},
-        {"id":"hdworkP",
-        "parentPath":None,
+        {"id":"15",
+        "parentPath":["0", "15"],
         "title":"",
         "hide":True}],
     
-    "blocks":[{"id": "15",
-        "parentPath": ["1","7","15"],
+    "blocks":[{"id": "16",
+        "parentPath": ["1","7","16"],
         "title":"",
-        "type":"standard"},
-        {"id": "16",
-        "parentPath": ["2","8","16"],
-        "title":"Matières premières",
         "type":"standard"},
         {"id": "17",
         "parentPath": ["2","8","17"],
-        "title":"Matiériel et outillage",
+        "title":"Matières premières",
         "type":"standard"},
         {"id": "18",
-        "parentPath": ["3","9","18"],
-        "title":"",
+        "parentPath": ["2","8","18"],
+        "title":"Matiériel et outillage",
         "type":"standard"},
         {"id": "19",
-        "parentPath": ["3","10","19"],
-        "title":"Coûts horaires/M.O interne",
+        "parentPath": ["3","9","19"],
+        "title":"",
         "type":"standard"},
         {"id": "20",
         "parentPath": ["3","10","20"],
-        "title":"Budget ouvrage//M.O interne",
+        "title":"Coûts horaires/M.O interne",
         "type":"standard"},
         {"id": "21",
         "parentPath": ["3","10","21"],
-        "title":"Temps de pose & prix unitaires//M.O interne",
+        "title":"Budget ouvrage//M.O interne",
         "type":"standard"},
         {"id": "22",
-        "parentPath": ["3","11","22"],
-        "title":"Budget ouvrage/sous-traitant",
+        "parentPath": ["3","10","22"],
+        "title":"Temps de pose & prix unitaires//M.O interne",
         "type":"standard"},
         {"id": "23",
         "parentPath": ["3","11","23"],
-        "title":"Décomposition des prix unitaires/sous-traitant",
+        "title":"Budget ouvrage/sous-traitant",
         "type":"standard"},
         {"id": "24",
-        "parentPath": ["4","12","24"],
-        "title":"",
+        "parentPath": ["3","11","24"],
+        "title":"Décomposition des prix unitaires/sous-traitant",
         "type":"standard"},
         {"id": "25",
-        "parentPath": ["5","13","25"],
+        "parentPath": ["4","12","25"],
         "title":"",
         "type":"standard"},
         {"id": "26",
-        "parentPath": ["6","14","26"],
+        "parentPath": ["5","13","26"],
         "title":"",
         "type":"standard"},
-        {"id": "hdworkPB",
-        "parentPath": None,
+        {"id": "27",
+        "parentPath": ["6","14","27"],
         "title":"",
+        "type":"standard"},
+        {"id": "28",
+        "parentPath": ["0", "15", "28"],
+        "title":"hdworkPB",
         "type":"standard"}],
     "fields":[]
     }
@@ -329,23 +331,23 @@ for field in lstBim[""]:
     if type(fileTab.loc[0, field.strip()]) != numpy.float64:
         tabId = fileTab.loc[0, field.strip()]
     else :
-        tabId = "hdwork"
+        tabId = "0"
     if type(fileTab.loc[1, field.strip()]) != numpy.float64:
         panelId = fileTab.loc[1, field.strip()]
     else :
-        panelId = "hdworkP"
+        panelId = "15"
     if type(fileTab.loc[2, field.strip()]) != numpy.float64:
         blockId = fileTab.loc[2, field.strip()]
     else :
-        blockId = "hdworkPB"
+        blockId = "28"
     fieldsBim["fields"] += [{
-        "dbField":"description",
+        "id":str(idFields),
+        "dbField":field,
         "label":field,
         "type":"textarea",
-        "tabId":str(tabId),
-        "panelId":str(panelId),
-        "blockId":str(blockId)
+        "parentPath":[str(tabId),str(panelId),str(blockId),str(idFields)]
         }]
+    idFields += 1
 jsonBim = json.dumps(fieldsBim)    
 cursor.execute("UPDATE hdwork_category SET views = ? WHERE BIMid = ?;",(jsonBim, "BIM"))
                      
